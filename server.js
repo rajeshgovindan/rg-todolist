@@ -3,13 +3,17 @@ var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
 
-var apiControllers = require('./api/controllers/')
-apiControllers.init(app);
+var apiControllers = require('./api/controllers/');
+var apiDatabase = require("./api/data/database");
+
     
 Object.assign=require('object-assign')
-
+app.use(express.json());
 app.engine('html', require('ejs').renderFile);
-app.use(morgan('combined'))
+app.use(morgan('combined'));
+
+apiControllers.init(app);
+
 
 var port = process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080,
     ip   = process.env.IP   || process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
@@ -37,9 +41,26 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
 }
 else
 {
+  mongoHost = "localhost";
+  mongoPort = "27017";
+  
 
   mongoURLLabel = mongoURL = "mongodb://localhost:27017/openshiftDb";
 }
+apiDatabaseName= "openshiftDb";
+apiDatabase.init(mongoHost,mongoPort,apiDatabaseName);
+// database.getDb(function(err,dbins){
+//   if(err){
+//     console.log("Error occured while connecting Database"+ err);
+//   }else{
+//     db = dbins.db;
+//     dbDetails.databaseName = dbins.db.databaseName;
+//     dbDetails.url = dbins.dbUrl;
+//     dbDetails.type = 'MongoDB';
+//   }
+
+// })
+
 var db = null,
     dbDetails = new Object();
 
@@ -107,7 +128,7 @@ app.use(function(err, req, res, next){
 });
 
 
-app.use(express.json());
+
 
 initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
