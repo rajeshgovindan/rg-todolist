@@ -2,6 +2,9 @@
 var express = require('express'),
     app     = express(),
     morgan  = require('morgan');
+
+var apiControllers = require('./api/controllers/')
+apiControllers.init(app);
     
 Object.assign=require('object-assign')
 
@@ -31,6 +34,11 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
     mongoURL += mongoHost + ':' +  mongoPort + '/' + mongoDatabase;
 
   }
+}
+else
+{
+
+  mongoURLLabel = mongoURL = "mongodb://localhost:27017/openshiftDb";
 }
 var db = null,
     dbDetails = new Object();
@@ -97,6 +105,9 @@ app.use(function(err, req, res, next){
   console.error(err.stack);
   res.status(500).send('Something bad happened!');
 });
+
+
+app.use(express.json());
 
 initDb(function(err){
   console.log('Error connecting to Mongo. Message:\n'+err);
