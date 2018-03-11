@@ -25,7 +25,7 @@ if (mongoURL == null && process.env.DATABASE_SERVICE_NAME) {
       mongoHost = process.env[mongoServiceName + '_SERVICE_HOST'],
       mongoPort = process.env[mongoServiceName + '_SERVICE_PORT'],
       mongoDatabase = process.env[mongoServiceName + '_DATABASE'],
-      mongoPassword = process.env[mongoServiceName + '_PASSWORD']
+      mongoPassword = process.env[mongoServiceName + '_PASSWORD'],
       mongoUser = process.env[mongoServiceName + '_USER'];
 
   if (mongoHost && mongoPort && mongoDatabase) {
@@ -47,8 +47,10 @@ else
 
   mongoURLLabel = mongoURL = "mongodb://localhost:27017/openshiftDb";
 }
-apiDatabaseName= mongoDatabase|| "openshiftDb";
-apiDatabase.init(mongoHost,mongoPort,apiDatabaseName);
+var apiDatabaseName= mongoDatabase|| "openshiftDb";
+var apidbUser= mongoUser || "";
+var apidbPassword= mongoPassword || "";
+apiDatabase.init(mongoHost,mongoPort,apiDatabaseName,apidbUser,apidbPassword);
 mongoURLLabel += " (apiDatabase :" + apiDatabaseName + ")";
 // database.getDb(function(err,dbins){
 //   if(err){

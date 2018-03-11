@@ -5,13 +5,18 @@
     var dbUrl = null;
     var dbName = null;
     var theDb = null;
-    database.init = function(dbhostname,dbport,databaseName){
+    database.init = function(dbhostname,dbport,databaseName,user,password){
         dbName=databaseName;
         var hostName = dbhostname|| "localhost";
         var port = dbport|| "27017";
         
+        dbUrl = "mongodb://";
 
-        dbUrl = "mongodb://"+hostName+ ":" + port +"/" + databaseName ;
+        if (user && password) {
+            dbUrl += user + ':' + password + '@';
+          }
+
+        dbUrl += hostName+ ":" + port +"/" + databaseName ;
         //"mongodb://localhost:27017/openshiftDb"
 
 
