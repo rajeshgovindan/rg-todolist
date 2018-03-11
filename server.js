@@ -47,8 +47,9 @@ else
 
   mongoURLLabel = mongoURL = "mongodb://localhost:27017/openshiftDb";
 }
-apiDatabaseName= "openshiftDb";
+apiDatabaseName= mongoDatabase|| "openshiftDb";
 apiDatabase.init(mongoHost,mongoPort,apiDatabaseName);
+mongoURLLabel += " (apiDatabase :" + apiDatabaseName + ")";
 // database.getDb(function(err,dbins){
 //   if(err){
 //     console.log("Error occured while connecting Database"+ err);
